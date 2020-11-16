@@ -47,9 +47,21 @@ public class Block implements Comparable<Block> {
         return height;
     }
 
-    public Block getRotated() {
+    public Block getRotated90() {
         return new Block(pixels.stream()
-                .map(Pixel::rotated)
+                .map(Pixel::rotated90)
+                .collect(Collectors.toList()), color);
+    }
+
+    public Block getRotated180() {
+        return new Block(pixels.stream()
+                .map(Pixel::rotated180)
+                .collect(Collectors.toList()), color);
+    }
+
+    public Block getRotated270() {
+        return new Block(pixels.stream()
+                .map(Pixel::rotated270)
                 .collect(Collectors.toList()), color);
     }
 
@@ -71,7 +83,6 @@ public class Block implements Comparable<Block> {
 
     @Override
     public int compareTo(Block other) {
-        if(other == null) return -1;
         if(id == null) id = new Identifier(this);
         if(other.id == null) other.id = new Identifier(other);
         return id.compareTo(other.id);

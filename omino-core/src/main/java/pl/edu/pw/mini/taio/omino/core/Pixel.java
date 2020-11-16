@@ -26,8 +26,16 @@ public class Pixel implements Comparable<Pixel>, Cloneable {
         this.y = this.y - y;
     }
 
-    public Pixel rotated() {
+    public Pixel rotated90() {
         return new Pixel(y, -x);
+    }
+
+    public Pixel rotated180() {
+        return new Pixel(-x, -y);
+    }
+
+    public Pixel rotated270() {
+        return new Pixel(-y, x);
     }
 
     @Override

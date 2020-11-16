@@ -12,7 +12,7 @@ public class Identifier implements Comparable<Identifier>{
         Block temp = block;
         id = unzip(block.getPixels());
         for (int i = 0; i < 3; i++) {
-            temp = temp.getRotated();
+            temp = temp.getRotated90();
             List<Integer> next = unzip(temp.getPixels());
             if (compare(id, next) < 0) {
                 id = next;

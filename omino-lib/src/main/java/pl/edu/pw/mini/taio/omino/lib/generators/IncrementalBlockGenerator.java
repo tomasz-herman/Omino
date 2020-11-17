@@ -22,6 +22,18 @@ public class IncrementalBlockGenerator implements BlockGenerator {
     private final List<Block> all;
 
     /**
+     * Creates new instance of block generator with random seed.
+     * All distinct existing blocks of given size are generated in constructor.
+     * Since number of blocks grows exponentially with block size this constructor might take a while.
+     * Also worth noticing is the size of collection of all blocks.
+     * There more than million of distinct blocks with size greater than 14
+     * @param size block size
+     */
+    public IncrementalBlockGenerator(int size) {
+        this(size, new Random().nextLong());
+    }
+
+    /**
      * Creates new instance of block generator.
      * All distinct existing blocks of given size are generated in constructor.
      * Since number of blocks grows exponentially with block size this constructor might take a while.

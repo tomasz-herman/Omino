@@ -7,10 +7,13 @@ import java.util.stream.Stream;
 
 public class Block implements Comparable<Block> {
     private final Collection<Pixel> pixels;
-    private Identifier id;
     private final int size;
-    private int width, height;
-    private final Color color;
+    private final int width;
+    private final int height;
+
+    private Identifier id;
+    private Block[] rotations;
+    private Color color;
 
     public Block(Block other) {
         this(other, other.color);
@@ -47,6 +50,7 @@ public class Block implements Comparable<Block> {
     }
 
     public Color getColor() {
+        if(color == null) color = new Color(hashCode());
         return color;
     }
 
@@ -75,6 +79,21 @@ public class Block implements Comparable<Block> {
     public Block getRotated270() {
         return new Block(pixels.stream()
                 .map(Pixel::rotated270), color);
+    }
+
+    public Block[] getRotations() {
+        if(rotations == null) {
+            rotations = new Block[] {
+                    this,
+                    getRotated90(),
+                    getRotated180(),
+                    getRotated270()
+            };
+            for (Block rotation : rotations) {
+                rotation.id = this.id;
+            }
+        }
+        return rotations;
     }
 
     @Override

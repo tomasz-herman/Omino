@@ -1,46 +1,46 @@
 package pl.edu.pw.mini.taio.omino.core;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 public class Identifier implements Comparable<Identifier>{
-    private List<Integer> id;
+    private int[] id;
+    private Integer hash;
 
     public Identifier(Block block) {
         Block temp = block;
         id = unzip(block.getPixels());
         for (int i = 0; i < 3; i++) {
             temp = temp.getRotated90();
-            List<Integer> next = unzip(temp.getPixels());
+            int[] next = unzip(temp.getPixels());
             if (compare(id, next) < 0) {
                 id = next;
             }
         }
     }
 
-    public List<Integer> unzip(Collection<Pixel> pixels) {
+    public int[] unzip(Collection<Pixel> pixels) {
         return pixels.stream()
-                .flatMap(p -> Stream.of(p.getX(), p.getY()))
-                .collect(Collectors.toList());
+                .flatMapToInt(p -> IntStream.of(p.getX(), p.getY()))
+                .toArray();
     }
 
-    public int compare(List<Integer> id1, List<Integer> id2) {
-        if (id1.size() != id2.size()) return id1.size() - id2.size();
-        for (int i = 0; i < id1.size(); i++) {
-            if(id1.get(i).equals(id2.get(i))) continue;
-            return id1.get(i) - id2.get(i);
+    public int compare(int[] id1, int[] id2) {
+        if (id1.length != id2.length) return id1.length - id2.length;
+        for (int i = 0; i < id1.length; i++) {
+            if(id1[i] == id2[i]) continue;
+            return id1[i] - id2[i];
         }
         return 0;
     }
 
     @Override
     public int compareTo(Identifier other) {
-        if (id.size() != other.id.size()) return id.size() - other.id.size();
-        for (int i = 0; i < id.size(); i++) {
-            if(id.get(i).equals(other.id.get(i))) continue;
-            return id.get(i) - other.id.get(i);
+        if (id.length != other.id.length) return id.length - other.id.length;
+        for (int i = 0; i < id.length; i++) {
+            if(id[i] == other.id[i]) continue;
+            return id[i] - other.id[i];
         }
         return 0;
     }
@@ -57,11 +57,15 @@ public class Identifier implements Comparable<Identifier>{
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        if(hash == null) {
+            hash = id.length;
+            for (int i : id) hash = hash * 119 + i;
+        }
+        return hash;
     }
 
     @Override
     public String toString() {
-        return "id=" + id;
+        return "id=" + Arrays.toString(id);
     }
 }

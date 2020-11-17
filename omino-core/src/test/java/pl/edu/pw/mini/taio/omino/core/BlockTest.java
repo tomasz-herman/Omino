@@ -3,6 +3,7 @@ package pl.edu.pw.mini.taio.omino.core;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,7 +14,7 @@ class BlockTest {
         // given:
         Block block;
         // when:
-        block = new Block(List.of(
+        block = new Block(Stream.of(
                 new Pixel(1, 1),
                 new Pixel(1, 2),
                 new Pixel(2, 2),
@@ -34,7 +35,7 @@ class BlockTest {
     @Test
     public void blockShouldRotate90() {
         // given:
-        Block block = new Block(List.of(
+        Block block = new Block(Stream.of(
                 new Pixel(0, 0),
                 new Pixel(1, 0),
                 new Pixel(0, 1),
@@ -57,7 +58,7 @@ class BlockTest {
     @Test
     public void blockShouldRotate180() {
         // given:
-        Block block = new Block(List.of(
+        Block block = new Block(Stream.of(
                 new Pixel(0, 0),
                 new Pixel(1, 0),
                 new Pixel(0, 1),
@@ -80,7 +81,7 @@ class BlockTest {
     @Test
     public void blockShouldRotate270() {
         // given:
-        Block block = new Block(List.of(
+        Block block = new Block(Stream.of(
                 new Pixel(0, 0),
                 new Pixel(1, 0),
                 new Pixel(0, 1),
@@ -103,7 +104,7 @@ class BlockTest {
     @Test
     public void blockShouldBeTheSameAsItsRotation() {
         // given:
-        Block block = new Block(List.of(
+        Block block = new Block(Stream.of(
                 new Pixel(0, 0),
                 new Pixel(1, 0),
                 new Pixel(0, 1),

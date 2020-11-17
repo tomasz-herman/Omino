@@ -3,32 +3,43 @@ package pl.edu.pw.mini.taio.omino.core;
 import java.awt.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Block implements Comparable<Block> {
     private final Collection<Pixel> pixels;
     private Identifier id;
+    private final int size;
     private int width, height;
     private final Color color;
 
+    public Block(Block other) {
+        this(other, other.color);
+    }
 
-    public Block(Collection<Pixel> pixels) {
+    public Block(Block other, Color color) {
+        this(other.pixels.stream(), color);
+    }
+
+    public Block(Stream<Pixel> pixels) {
         this(pixels, null);
     }
 
-    public Block(Collection<Pixel> pixels, Color color) {
-        this.pixels = pixels.stream()
+    public Block(Stream<Pixel> pixels, Color color) {
+        this.pixels = Collections.unmodifiableCollection(
+                pixels
                 .map(Pixel::new)
-                .collect(Collectors.toCollection(TreeSet::new));
+                .collect(Collectors.toCollection(TreeSet::new)));
         this.color = color;
+        this.size = this.pixels.size();
         normalize();
+        this.width = this.pixels.stream().mapToInt(Pixel::getX).max().orElse(-1) + 1;
+        this.height = this.pixels.stream().mapToInt(Pixel::getY).max().orElse(-1) + 1;
     }
 
     public void normalize() {
         int minX = pixels.stream().mapToInt(Pixel::getX).min().orElse(0);
         int minY = pixels.stream().mapToInt(Pixel::getY).min().orElse(0);
         pixels.forEach(pixel -> pixel.normalize(minX, minY));
-        width = pixels.stream().mapToInt(Pixel::getX).max().orElse(-1) + 1;
-        height = pixels.stream().mapToInt(Pixel::getY).max().orElse(-1) + 1;
     }
 
     public Collection<Pixel> getPixels() {
@@ -47,22 +58,23 @@ public class Block implements Comparable<Block> {
         return height;
     }
 
+    public int getSize() {
+        return size;
+    }
+
     public Block getRotated90() {
         return new Block(pixels.stream()
-                .map(Pixel::rotated90)
-                .collect(Collectors.toList()), color);
+                .map(Pixel::rotated90), color);
     }
 
     public Block getRotated180() {
         return new Block(pixels.stream()
-                .map(Pixel::rotated180)
-                .collect(Collectors.toList()), color);
+                .map(Pixel::rotated180), color);
     }
 
     public Block getRotated270() {
         return new Block(pixels.stream()
-                .map(Pixel::rotated270)
-                .collect(Collectors.toList()), color);
+                .map(Pixel::rotated270), color);
     }
 
     @Override
@@ -82,7 +94,9 @@ public class Block implements Comparable<Block> {
     }
 
     @Override
+    @SuppressWarnings("NullableProblems")
     public int compareTo(Block other) {
+        if(other == null) throw new NullPointerException();
         if(id == null) id = new Identifier(this);
         if(other.id == null) other.id = new Identifier(other);
         return id.compareTo(other.id);

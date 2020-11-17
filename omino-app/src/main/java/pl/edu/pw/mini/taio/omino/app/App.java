@@ -1,14 +1,19 @@
 package pl.edu.pw.mini.taio.omino.app;
 
-import pl.edu.pw.mini.taio.omino.core.Block;
 import pl.edu.pw.mini.taio.omino.lib.generators.BlockGenerator;
 import pl.edu.pw.mini.taio.omino.lib.generators.IncrementalBlockGenerator;
 
 public class App {
     public static void main(String[] args) {
-        BlockGenerator generator = new IncrementalBlockGenerator(12, 123);
-        for (Block block : generator.all()) {
-            System.out.println(block);
+        for (int i = 1; i <= 16; i++) {
+            long start = System.nanoTime();
+            BlockGenerator generator = new IncrementalBlockGenerator(i, 123);
+            long end = System.nanoTime();
+            System.out.printf("Generated %d block%s of size %d in %.6fs%n",
+                    generator.count(),
+                    generator.count() != 1 ? 's' : "",
+                    i,
+                    (double)(end - start)/1_000_000_000);
         }
     }
 }

@@ -5,12 +5,15 @@ import pl.edu.pw.mini.taio.omino.core.Pixel;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
+/**
+ * Generator designed to pre-generate all distinct existing blocks of given size.
+ */
 public class IncrementalBlockGenerator implements BlockGenerator {
 
     private static final Set<Block> INITIAL =
-            Set.of(new Block(List.of(new Pixel(0, 0))));
+            Set.of(new Block(Stream.of(new Pixel(0, 0))));
     private static final List<List<Integer>> MOVES =
             List.of(List.of(1, 0), List.of(-1, 0), List.of(0, 1), List.of(0, -1));
 
@@ -18,21 +21,31 @@ public class IncrementalBlockGenerator implements BlockGenerator {
     private final Random random;
     private final List<Block> all;
 
+    /**
+     * Creates new instance of block generator.
+     * All distinct existing blocks of given size are generated in constructor.
+     * Since number of blocks grows exponentially with block size this constructor might take a while.
+     * Also worth noticing is the size of collection of all blocks.
+     * There more than million of distinct blocks with size greater than 14
+     * @param size block size
+     * @param seed for random number generation
+     */
     public IncrementalBlockGenerator(int size, long seed) {
+        if(size < 0) throw new IllegalArgumentException("Block size must be a positive integer!");
         this.random = new Random(seed);
-        Set<Block> set = INITIAL;
-        for (int i = 0; i < size - 1; i++)
-        {
+        if(size == 0) {
+            all = List.of(new Block(Stream.of()));
+            return;
+        }
+        Set<Block> set = INITIAL.stream().map(Block::new).collect(Collectors.toSet());
+        for (int i = 0; i < size - 1; i++) {
             Set<Block> next = new HashSet<>();
             for (Block block : set) {
                 for (Pixel pixel : block.getPixels()) {
                     for (List<Integer> move : MOVES) {
                         Pixel p = new Pixel(pixel.getX() + move.get(0), pixel.getY() + move.get(1));
                         if(block.getPixels().contains(p)) continue;
-                        Block b = new Block(block.getPixels());
-                        b.getPixels().add(p);
-                        b.normalize();
-                        next.add(b);
+                        next.add(new Block(Stream.concat(block.getPixels().stream(), Stream.of(p))));
                     }
                 }
             }
@@ -42,20 +55,22 @@ public class IncrementalBlockGenerator implements BlockGenerator {
     }
 
     @Override
-    public Block generate() {
+    public Block any() {
         return all.get(random.nextInt(all.size()));
     }
 
     @Override
-    public Collection<Block> generate(int count) {
-        return IntStream.range(0, count)
-                .mapToObj(i -> generate())
-                .collect(Collectors.toList());
+    public Stream<Block> many() {
+        return random.ints(0, all.size()).mapToObj(all::get);
     }
 
     @Override
-    public Collection<Block> all() {
-        return all;
+    public Stream<Block> all() {
+        return all.stream();
+    }
+
+    public int count() {
+        return all.size();
     }
 
 }

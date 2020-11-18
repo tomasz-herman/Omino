@@ -28,8 +28,6 @@ public class Cut {
 
     @Override
     public int hashCode() {
-        int result = x != null ? x.hashCode() : 0;
-        result = 31 * result + (y != null ? y.hashCode() : 0);
-        return result;
+        return x.hashCode() + y.hashCode();
     }
 }

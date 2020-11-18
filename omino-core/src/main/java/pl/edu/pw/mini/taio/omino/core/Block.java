@@ -57,6 +57,24 @@ public class Block implements Comparable<Block> {
         return color;
     }
 
+    public void setColor(Color color) {
+        this.color = color;
+        if(rotations != null) {
+            for (Block rotation : rotations) {
+                rotation.color = color;
+            }
+        }
+        if(cutBlocks != null) {
+            for (Collection<Collection<Block>> cutBlock : cutBlocks) {
+                for (Collection<Block> blocks : cutBlock) {
+                    for (Block block : blocks) {
+                        block.color = color;
+                    }
+                }
+            }
+        }
+    }
+
     public int getWidth() {
         return width;
     }

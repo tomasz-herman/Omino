@@ -68,17 +68,17 @@ public class IncrementalBlockGenerator implements BlockGenerator {
 
     @Override
     public Block any() {
-        return all.get(random.nextInt(all.size()));
+        return new Block(all.get(random.nextInt(all.size())));
     }
 
     @Override
     public Stream<Block> many() {
-        return random.ints(0, all.size()).mapToObj(all::get);
+        return random.ints(0, all.size()).mapToObj(all::get).map(Block::new);
     }
 
     @Override
     public Stream<Block> all() {
-        return all.stream();
+        return all.stream().map(Block::new);
     }
 
     public int count() {

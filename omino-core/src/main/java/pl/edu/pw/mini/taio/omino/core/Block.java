@@ -85,7 +85,7 @@ public class Block implements Comparable<Block> {
 
     public Collection<Block> getRotations() {
         if(rotations == null) {
-            rotations = new LinkedList<>();
+            rotations = new ArrayList<>();
             rotations.add(this);
             List<Supplier<Block>> rotators = List.of(this::getRotated90, this::getRotated180, this::getRotated270);
             for (Supplier<Block> rotator : rotators) {
@@ -94,7 +94,10 @@ public class Block implements Comparable<Block> {
                     rotations.add(rotation);
                 else break;
             }
-            for (Block rotation : rotations) rotation.id = this.id;
+            for (Block rotation : rotations) {
+                rotation.id = this.id;
+                rotation.rotations = this.rotations;
+            }
         }
         return rotations;
     }

@@ -3,15 +3,15 @@ package pl.edu.pw.mini.taio.omino.app;
 import pl.edu.pw.mini.taio.omino.core.Block;
 import pl.edu.pw.mini.taio.omino.lib.generators.BlockGenerator;
 import pl.edu.pw.mini.taio.omino.lib.generators.IncrementalBlockGenerator;
-import pl.edu.pw.mini.taio.omino.lib.solvers.FastSquare;
+import pl.edu.pw.mini.taio.omino.lib.solvers.OptimalSquare;
 import pl.edu.pw.mini.taio.omino.lib.solvers.Solver;
 
 public class App {
     public static void main(String[] args) {
         BlockGenerator generator = new IncrementalBlockGenerator(5);
-        Block[] blocks = generator.many().limit(25).toArray(Block[]::new);
-        Solver solver = new FastSquare(blocks);
-        Block[][] solution = solver.solve();
+        Block[] blocks = generator.many().limit(12).toArray(Block[]::new);
+        Solver solver = new OptimalSquare(blocks);
+        Block[][] solution = solver.benchmark();
         for (Block[] arr : solution) {
             for (Block block : arr) {
                 if(block == null) System.out.print("  ");
@@ -19,5 +19,6 @@ public class App {
             }
             System.out.println();
         }
+        System.out.printf("Solution found in %.6fs%n", solver.getTime());
     }
 }

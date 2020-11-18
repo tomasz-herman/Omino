@@ -23,7 +23,7 @@ public class Cut {
 
         Cut cut = (Cut) o;
 
-        return cut.x == x && cut.y == y || cut.x == y && cut.y == x;
+        return cut.x.equals(x) && cut.y.equals(y) || cut.x.equals(y) && cut.y.equals(x);
     }
 
     @Override

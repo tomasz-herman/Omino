@@ -16,6 +16,7 @@ public class Block implements Comparable<Block> {
     private Identifier id;
     private Collection<Block> rotations;
     private Color color;
+    private List<Collection<Collection<Block>>> cutBlocks;
 
     public Block(Block other) {
         this(other, other.color);
@@ -100,6 +101,87 @@ public class Block implements Comparable<Block> {
             }
         }
         return rotations;
+    }
+
+    public Collection<Collection<Block>> getCutBlocks(int cuts) {
+        if(cutBlocks == null) calculateCutBlocks();
+        if (cuts >= cutBlocks.size())
+            return null;
+        return cutBlocks.get(cuts);
+    }
+
+    private void calculateCutBlocks() {
+        cutBlocks = new ArrayList<>();
+        List<Cut> possibleCuts = getPossibleCuts();
+        boolean[] onOffCutList = new boolean[possibleCuts.size()];
+        for (int i = 0; i <= possibleCuts.size(); i++) {
+            cutBlocks.add(new ArrayList<>());
+        }
+        calculateCutBlocksRec(possibleCuts, onOffCutList, 0);
+    }
+
+    private void calculateCutBlocksRec(List<Cut> possibleCuts, boolean[] onOffCutList, int level) {
+
+        List<Cut> cuts = new ArrayList<>();
+        for (int i = 0; i < onOffCutList.length; i++) {
+            if (onOffCutList[i]) cuts.add(possibleCuts.get(i));
+        }
+        List<Block> blocks = split(cuts);
+        blocks.sort(Comparator.naturalOrder());
+        if (!cutBlocks.get(cuts.size()).contains(blocks)) {
+            cutBlocks.get(cuts.size()).add(blocks);
+        }
+
+        if (level == possibleCuts.size()) return;
+        onOffCutList[level] = true;
+        calculateCutBlocksRec(possibleCuts, onOffCutList,level + 1);
+        onOffCutList[level] = false;
+        calculateCutBlocksRec(possibleCuts, onOffCutList,level + 1);
+    }
+
+    private List<Block> split(List<Cut> cuts) {
+        List<Pixel> pixelList = new ArrayList<>(pixels);
+        List<Block> split = new ArrayList<>();
+        boolean[] marked = new boolean[pixels.size()];
+        int marks = 0;
+
+        while(marks < pixels.size()) {
+            List<Pixel> temp = new ArrayList<>();
+            for (int i = 0; i < marked.length; i++) {
+                if (!marked[i]) {
+                    marked[i] = true;
+                    temp.add(pixelList.get(i));
+                    marks++;
+                    break;
+                }
+            }
+            for (Pixel __ : pixelList) {
+                for (Pixel pixel : pixelList) {
+                    if(!temp.contains(pixel)) {
+                        if(temp.stream().anyMatch(pix -> pix.isNeighbor(pixel) && !cuts.contains(new Cut(pixel, pix)))) {
+                            temp.add(pixel);
+                            marked[pixelList.indexOf(pixel)] = true;
+                            marks++;
+                        }
+                    }
+                }
+            }
+            split.add(new Block(temp.stream(), color));
+        }
+
+        return split;
+    }
+
+    private List<Cut> getPossibleCuts() {
+        List<Cut> cuts = new ArrayList<>();
+        for (Pixel x : pixels) {
+            for (Pixel y : pixels) {
+                if(x.compareTo(y) > 0) {
+                    if(x.isNeighbor(y)) cuts.add(new Cut(x, y));
+                }
+            }
+        }
+        return cuts;
     }
 
     @Override

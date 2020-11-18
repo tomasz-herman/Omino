@@ -26,6 +26,12 @@ public class Pixel implements Comparable<Pixel>, Cloneable {
         this.y = this.y - y;
     }
 
+    public boolean isNeighbor(Pixel other)
+    {
+        if (x == other.x && Math.abs(y - other.y) == 1) return true;
+        return y == other.y && Math.abs(x - other.x) == 1;
+    }
+
     public Pixel rotated90() {
         return new Pixel(y, -x);
     }

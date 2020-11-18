@@ -2,6 +2,8 @@ package pl.edu.pw.mini.taio.omino.core;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -12,7 +14,7 @@ public class Block implements Comparable<Block> {
     private final int height;
 
     private Identifier id;
-    private Block[] rotations;
+    private Collection<Block> rotations;
     private Color color;
 
     public Block(Block other) {
@@ -81,17 +83,18 @@ public class Block implements Comparable<Block> {
                 .map(Pixel::rotated270), color);
     }
 
-    public Block[] getRotations() {
+    public Collection<Block> getRotations() {
         if(rotations == null) {
-            rotations = new Block[] {
-                    this,
-                    getRotated90(),
-                    getRotated180(),
-                    getRotated270()
-            };
-            for (Block rotation : rotations) {
-                rotation.id = this.id;
+            rotations = new LinkedList<>();
+            rotations.add(this);
+            List<Supplier<Block>> rotators = List.of(this::getRotated90, this::getRotated180, this::getRotated270);
+            for (Supplier<Block> rotator : rotators) {
+                Block rotation = rotator.get();
+                if (rotations.stream().noneMatch(block -> block.pixels.containsAll(rotation.pixels)))
+                    rotations.add(rotation);
+                else break;
             }
+            for (Block rotation : rotations) rotation.id = this.id;
         }
         return rotations;
     }

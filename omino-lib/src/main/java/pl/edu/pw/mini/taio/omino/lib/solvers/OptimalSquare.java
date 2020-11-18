@@ -16,7 +16,6 @@ public class OptimalSquare extends Solver {
             return new Block[0][];
         int pixels = Arrays.stream(blocks).mapToInt(Block::getSize).sum();
         int min = (int) Math.ceil(Math.sqrt(pixels));
-        System.out.println(min + ", " + pixels);
         for (int i = min; i < pixels; i++) {
             Block[][] solution = new Block[i][i];
             if(recursion(solution, 0)) return solution;

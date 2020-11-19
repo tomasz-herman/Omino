@@ -233,6 +233,7 @@ public class Block implements Comparable<Block> {
         pixels.forEach(p -> arr[p.getY()][p.getX()] = true);
 
         StringBuilder builder = new StringBuilder();
+        builder.append("\n");
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 builder.append(arr[i][j] ? "██" : "  ");

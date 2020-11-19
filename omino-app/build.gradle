@@ -1,20 +1,30 @@
 plugins {
     id 'java-application-conventions'
+    id 'org.openjfx.javafxplugin' version '0.0.9'
+    id 'org.beryx.runtime' version '1.11.4'
 }
 
 dependencies {
     implementation project(':omino-lib')
 }
 
+javafx {
+    version = '14'
+    modules = [ 'javafx.base', 'javafx.graphics', 'javafx.controls', 'javafx.swing', 'javafx.fxml' ]
+    mainClassName = 'pl.edu.pw.mini.taio.omino.app.Launcher'
+}
+
 application {
-    mainClass = 'pl.edu.pw.mini.taio.omino.app.App'
+    mainClass = 'pl.edu.pw.mini.taio.omino.app.Launcher'
 }
 
 jar {
+    dependsOn(':omino-lib:jar')
+    dependsOn(':omino-core:jar')
     manifest {
-        attributes('Main-Class': 'pl.edu.pw.mini.taio.omino.app.App')
+        attributes('Main-Class': 'pl.edu.pw.mini.taio.omino.app.Launcher')
     }
     from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        project.configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }

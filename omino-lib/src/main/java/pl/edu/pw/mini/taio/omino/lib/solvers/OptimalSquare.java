@@ -19,6 +19,7 @@ public class OptimalSquare extends Solver {
         for (int i = min; i < pixels; i++) {
             Block[][] solution = new Block[i][i];
             if(recursion(solution, 0)) return solution;
+            if(Thread.interrupted()) return null;
         }
         return null;
     }
@@ -28,6 +29,7 @@ public class OptimalSquare extends Solver {
         for (Block rotation : blocks[level].getRotations()) {
             for (int i = 0; i < solution.length - rotation.getWidth() + 1; i++) {
                 for (int j = 0; j < solution.length - rotation.getHeight() + 1; j++) {
+                    if(Thread.currentThread().isInterrupted()) return false;
                     if (!available(solution, rotation, i, j)) continue;
                     insert(solution, rotation, i, j);
                     if (recursion(solution, level + 1)) return true;

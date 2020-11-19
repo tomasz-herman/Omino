@@ -26,6 +26,7 @@ public class FastRectangle extends RectangleSolver {
             for (Block rotation : block.getRotations()) {
                 for (int i = 0; i < solution.length - rotation.getWidth() + 1; i++) {
                     for (int j = 0; j < solution[0].length - rotation.getHeight() + 1; j++) {
+                        if(Thread.interrupted()) return null;
                         if (!available(solution, rotation, i, j)) continue;
                         insert(solution, rotation, i, j);
                         continue next_block;

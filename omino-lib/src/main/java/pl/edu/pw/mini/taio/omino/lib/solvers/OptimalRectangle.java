@@ -24,6 +24,7 @@ public class OptimalRectangle extends RectangleSolver {
         while (true) {
             int[] cutsDistribution = new int[blocks.length];
             if (solveRec(cutsDistribution, 0, cuts, solution)) return solution;
+            if(Thread.interrupted()) return null;
             cuts++;
         }
     }
@@ -69,6 +70,7 @@ public class OptimalRectangle extends RectangleSolver {
         for (Block rotation : blockList.get(level).getRotations()) {
             for (int i = 0; i < solution.length - rotation.getWidth() + 1; i++) {
                 for (int j = 0; j < solution[0].length - rotation.getHeight() + 1; j++) {
+                    if(Thread.currentThread().isInterrupted()) return false;
                     if (!available(solution, rotation, i, j)) continue;
                     insert(solution, rotation, i, j);
                     if (solveRecRecRec(solution, blockList, level + 1)) return true;

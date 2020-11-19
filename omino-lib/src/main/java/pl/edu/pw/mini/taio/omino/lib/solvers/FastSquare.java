@@ -13,7 +13,7 @@ public class FastSquare extends Solver {
     @Override
     public Block[][] solve() {
         if (blocks == null || blocks.length == 0)
-            return new Block[0][];
+            return new Block[0][0];
         int pixels = Arrays.stream(blocks).mapToInt(Block::getSize).sum();
         int min = (int) Math.ceil(Math.sqrt(pixels));
         next_board:
@@ -24,6 +24,7 @@ public class FastSquare extends Solver {
                 for (Block rotation : block.getRotations()) {
                     for (int i = 0; i < solution.length - rotation.getWidth() + 1; i++) {
                         for (int j = 0; j < solution.length - rotation.getHeight() + 1; j++) {
+                            if(Thread.interrupted()) return null;
                             if (available(solution, rotation, i, j)) {
                                 insert(solution, rotation, i, j);
                                 continue next_block;

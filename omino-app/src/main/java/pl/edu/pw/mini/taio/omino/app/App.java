@@ -3,20 +3,18 @@ package pl.edu.pw.mini.taio.omino.app;
 import pl.edu.pw.mini.taio.omino.core.Block;
 import pl.edu.pw.mini.taio.omino.lib.generators.BlockGenerator;
 import pl.edu.pw.mini.taio.omino.lib.generators.IncrementalBlockGenerator;
-import pl.edu.pw.mini.taio.omino.lib.solvers.OptimalRectangle;
+import pl.edu.pw.mini.taio.omino.lib.solvers.FastRectangle;
 import pl.edu.pw.mini.taio.omino.lib.solvers.RectangleSolver;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.Random;
 
 public class App {
     public static void main(String[] args) {
         Random random = new Random();
-        BlockGenerator generator = new IncrementalBlockGenerator(5);
-        Block[] blocks = generator.many().limit(2).peek(b -> b.setColor(new Color(random.nextInt()))).toArray(Block[]::new);
-        System.out.println(Arrays.toString(blocks));
-        RectangleSolver solver = new OptimalRectangle(blocks);
+        BlockGenerator generator = new IncrementalBlockGenerator(3);
+        Block[] blocks = generator.many().limit(10000).peek(b -> b.setColor(new Color(random.nextInt()))).toArray(Block[]::new);
+        RectangleSolver solver = new FastRectangle(blocks);
         Block[][] solution = solver.benchmark();
         for (Block[] arr : solution) {
             for (Block block : arr) {

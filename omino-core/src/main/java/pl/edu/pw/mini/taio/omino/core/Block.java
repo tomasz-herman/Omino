@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Block implements Comparable<Block> {
-    private final Collection<Pixel> pixels;
+    private final SortedSet<Pixel> pixels;
     private final int size;
     private final int width;
     private final int height;
@@ -31,7 +31,7 @@ public class Block implements Comparable<Block> {
     }
 
     public Block(Stream<Pixel> pixels, Color color) {
-        this.pixels = Collections.unmodifiableCollection(
+        this.pixels = Collections.unmodifiableSortedSet(
                 pixels
                 .map(Pixel::new)
                 .collect(Collectors.toCollection(TreeSet::new)));
@@ -48,7 +48,7 @@ public class Block implements Comparable<Block> {
         pixels.forEach(pixel -> pixel.normalize(minX, minY));
     }
 
-    public Collection<Pixel> getPixels() {
+    public SortedSet<Pixel> getPixels() {
         return pixels;
     }
 
@@ -173,7 +173,7 @@ public class Block implements Comparable<Block> {
                     break;
                 }
             }
-            for (Pixel __ : pixelList) {
+            for (Pixel ignored : pixelList) {
                 for (Pixel pixel : pixelList) {
                     if(!temp.contains(pixel)) {
                         if(temp.stream().anyMatch(pix -> pix.isNeighbor(pixel) && !cuts.contains(new Cut(pixel, pix)))) {

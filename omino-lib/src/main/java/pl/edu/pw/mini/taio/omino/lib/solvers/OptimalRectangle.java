@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OptimalRectangle extends RectangleSolver {
 
@@ -21,6 +20,7 @@ public class OptimalRectangle extends RectangleSolver {
         Dimension dimension = getDimensions(area);
         if(dimension == null) return null;
         Block[][] solution = new Block[dimension.height][dimension.width];
+        cuts = 0;
         while (true) {
             int[] cutsDistribution = new int[blocks.length];
             if (solveRec(cutsDistribution, 0, cuts, solution)) return solution;

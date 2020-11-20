@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Block implements Comparable<Block> {
@@ -157,7 +158,7 @@ public class Block implements Comparable<Block> {
         calculateCutBlocksRec(possibleCuts, onOffCutList,level + 1);
     }
 
-    private List<Block> split(List<Cut> cuts) {
+    public List<Block> split(List<Cut> cuts) {
         List<Pixel> pixelList = new ArrayList<>(pixels);
         List<Block> split = new ArrayList<>();
         boolean[] marked = new boolean[pixels.size()];
@@ -190,7 +191,7 @@ public class Block implements Comparable<Block> {
         return split;
     }
 
-    private List<Cut> getPossibleCuts() {
+    public List<Cut> getPossibleCuts() {
         List<Cut> cuts = new ArrayList<>();
         for (Pixel x : pixels) {
             for (Pixel y : pixels) {
@@ -214,7 +215,7 @@ public class Block implements Comparable<Block> {
 
     @Override
     public int hashCode() {
-        if(id == null) id = new Identifier(this);
+        if(id == null) id = new Identifier();
         return id.hashCode();
     }
 
@@ -222,8 +223,8 @@ public class Block implements Comparable<Block> {
     @SuppressWarnings("NullableProblems")
     public int compareTo(Block other) {
         if(other == null) throw new NullPointerException();
-        if(id == null) id = new Identifier(this);
-        if(other.id == null) other.id = new Identifier(other);
+        if(id == null) id = new Identifier();
+        if(other.id == null) other.id = other.new Identifier();
         return id.compareTo(other.id);
     }
 
@@ -242,5 +243,71 @@ public class Block implements Comparable<Block> {
         }
 
         return builder.toString();
+    }
+
+    private class Identifier implements Comparable<Identifier>{
+        private int[] id;
+        private Integer hash;
+
+        private Identifier() {
+            Block temp = Block.this;
+            id = unzip(temp.getPixels());
+            for (int i = 0; i < 3; i++) {
+                temp = temp.getRotated90();
+                int[] next = unzip(temp.getPixels());
+                if (compare(id, next) < 0) {
+                    id = next;
+                }
+            }
+        }
+
+        private int[] unzip(Collection<Pixel> pixels) {
+            return pixels.stream()
+                    .flatMapToInt(p -> IntStream.of(p.getX(), p.getY()))
+                    .toArray();
+        }
+
+        public int compare(int[] id1, int[] id2) {
+            if (id1.length != id2.length) return id1.length - id2.length;
+            for (int i = 0; i < id1.length; i++) {
+                if(id1[i] == id2[i]) continue;
+                return id1[i] - id2[i];
+            }
+            return 0;
+        }
+
+        @Override
+        public int compareTo(Identifier other) {
+            if (id.length != other.id.length) return id.length - other.id.length;
+            for (int i = 0; i < id.length; i++) {
+                if(id[i] == other.id[i]) continue;
+                return id[i] - other.id[i];
+            }
+            return 0;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Identifier that = (Identifier) o;
+
+            return compareTo(that) == 0;
+        }
+
+        @Override
+        public int hashCode() {
+            if(hash == null) {
+                hash = id.length;
+                for (int i : id) hash = hash * 119 + i;
+            }
+            return hash;
+        }
+
+        @Override
+        public String toString() {
+            return "id=" + Arrays.toString(id);
+        }
     }
 }

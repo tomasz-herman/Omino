@@ -26,7 +26,7 @@ public class IncrementalBlockGenerator implements BlockGenerator {
      * All distinct existing blocks of given size are generated in constructor.
      * Since number of blocks grows exponentially with block size this constructor might take a while.
      * Also worth noticing is the size of collection of all blocks.
-     * There more than million of distinct blocks with size greater than 14
+     * There are more than million of distinct blocks with size greater than 14
      * @param size block size
      */
     public IncrementalBlockGenerator(int size) {
@@ -38,7 +38,7 @@ public class IncrementalBlockGenerator implements BlockGenerator {
      * All distinct existing blocks of given size are generated in constructor.
      * Since number of blocks grows exponentially with block size this constructor might take a while.
      * Also worth noticing is the size of collection of all blocks.
-     * There more than million of distinct blocks with size greater than 14
+     * There are more than million of distinct blocks with size greater than 14
      * @param size block size
      * @param seed for random number generation
      */
@@ -81,6 +81,7 @@ public class IncrementalBlockGenerator implements BlockGenerator {
         return all.stream().map(Block::new);
     }
 
+    @Override
     public int count() {
         return all.size();
     }

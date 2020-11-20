@@ -22,6 +22,16 @@ class IncrementalBlockGeneratorTest {
     }
 
     @Test
+    public void shouldBeOneBlockWithSizeZero() {
+        // given:
+        BlockGenerator generator = new IncrementalBlockGenerator(0, 0);
+        // when:
+        Collection<Block> blocks = generator.all().collect(Collectors.toList());
+        // then:
+        assertThat(blocks).size().isEqualTo(1);
+    }
+
+    @Test
     public void shouldBeOneBlockWithSizeOne() {
         // given:
         BlockGenerator generator = new IncrementalBlockGenerator(1, 0);

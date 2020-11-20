@@ -19,12 +19,10 @@ application {
 }
 
 jar {
-    dependsOn(':omino-lib:jar')
-    dependsOn(':omino-core:jar')
     manifest {
         attributes('Main-Class': 'pl.edu.pw.mini.taio.omino.app.Launcher')
     }
     from {
-        project.configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        project.configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }

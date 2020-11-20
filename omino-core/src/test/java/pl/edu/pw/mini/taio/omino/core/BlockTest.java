@@ -2,7 +2,14 @@ package pl.edu.pw.mini.taio.omino.core;
 
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -115,6 +122,246 @@ class BlockTest {
         boolean equals = block.equals(rotated);
         // then:
         assertThat(equals).isEqualTo(true);
+    }
+
+    @Test
+    public void symmetricalBlocksShouldHaveOnlySelfRotation() {
+        // given:
+        //    ██
+        //  ██████
+        //    ██
+        Block block = new Block(Stream.of(
+                new Pixel(0, 1),
+                new Pixel(1, 0),
+                new Pixel(1, 1),
+                new Pixel(1, 2),
+                new Pixel(2, 1)
+        ));
+        // when:
+        Collection<Block> rotations = block.getRotations();
+        // then:
+        assertThat(rotations).containsExactly(block);
+    }
+
+    @Test
+    public void halfSymmetricalBlocksShouldHaveTwoRotations() {
+        // given:
+        //      ██
+        //  ██████
+        //  ██
+        Block block = new Block(Stream.of(
+                new Pixel(0, 0),
+                new Pixel(0, 1),
+                new Pixel(1, 1),
+                new Pixel(2, 1),
+                new Pixel(2, 2)
+        ));
+        // when:
+        Collection<Block> rotations = block.getRotations();
+        // then:
+        assertThat(rotations).hasSize(2);
+    }
+
+    @Test
+    public void nonSymmetricalBlocksShouldHaveFourRotations() {
+        // given:
+        //    ██
+        //  ██████
+        //  ██
+        Block block = new Block(Stream.of(
+                new Pixel(0, 0),
+                new Pixel(0, 1),
+                new Pixel(1, 1),
+                new Pixel(2, 1),
+                new Pixel(1, 2)
+        ));
+        // when:
+        Collection<Block> rotations = block.getRotations();
+        // then:
+        assertThat(rotations).hasSize(4);
+    }
+
+    @Test
+    public void duplicatedPixelsAreMergedIntoOne() {
+        // given:
+        Block block = new Block(Stream.of(
+                new Pixel(0, 0),
+                new Pixel(0, 0)
+        ));
+        // when:
+        Collection<Pixel> pixels = block.getPixels();
+        // then:
+        assertThat(pixels).hasSize(1);
+    }
+
+    @Test
+    public void splitShouldPreserveBlockIfCutsAreNotSufficient() {
+        // given:
+        //  ████
+        //  ████
+        Block block = new Block(Stream.of(
+                new Pixel(0, 0),
+                new Pixel(0, 1),
+                new Pixel(1, 0),
+                new Pixel(1, 1)
+        ));
+        List<Cut> cuts = List.of(new Cut(new Pixel(0, 0), new Pixel(1, 0)));
+        // when:
+        Collection<Block> blocks = block.split(cuts);
+        // then:
+        assertThat(blocks).containsExactly(block);
+    }
+
+    @Test
+    public void splitShouldPreserveBlockIfCutsMisses() {
+        // given:
+        //    __
+        //  ████████
+        Block block = new Block(Stream.of(
+                new Pixel(0, 0),
+                new Pixel(1, 0),
+                new Pixel(2, 0),
+                new Pixel(3, 0)
+        ));
+        List<Cut> cuts = List.of(new Cut(new Pixel(1, 0), new Pixel(1, 1)));
+        // when:
+        Collection<Block> blocks = block.split(cuts);
+        // then:
+        assertThat(blocks).containsExactly(block);
+    }
+
+    @Test
+    public void splitShouldCutBaguetteInTwoHalves() {
+        // given:
+        //  ████|████
+        Block baguette = new Block(Stream.of(
+                new Pixel(0, 0),
+                new Pixel(1, 0),
+                new Pixel(2, 0),
+                new Pixel(3, 0)
+        ));
+        List<Cut> cuts = List.of(new Cut(new Pixel(1, 0), new Pixel(2, 0)));
+        // when:
+        Collection<Block> blocks = baguette.split(cuts);
+        // then:
+        Block halfBaguette = new Block(Stream.of(
+                new Pixel(0, 0),
+                new Pixel(1, 0)
+        ));
+        assertThat(blocks).containsExactly(halfBaguette, halfBaguette);
+    }
+
+    @Test
+    public void possibleCutsShouldReturnAllPossibleCuts() {
+        // given:
+        //  ████
+        //  ████
+        Block block = new Block(Stream.of(
+                new Pixel(0, 0),
+                new Pixel(0, 1),
+                new Pixel(1, 0),
+                new Pixel(1, 1)
+        ));
+
+        // when:
+        Collection<Cut> cuts = block.getPossibleCuts();
+        // then:
+        assertThat(cuts).containsExactlyInAnyOrderElementsOf(List.of(
+                new Cut(new Pixel(0, 0), new Pixel(0, 1)),
+                new Cut(new Pixel(0, 0), new Pixel(1, 0)),
+                new Cut(new Pixel(1, 1), new Pixel(1, 0)),
+                new Cut(new Pixel(1, 1), new Pixel(0, 1))));
+    }
+
+    @Test
+    public void rotatedBlocksHaveSameColorAsOriginal() {
+        // given:
+        Color color = Color.CYAN;
+        Block block = new Block(Stream.of(
+                new Pixel(0, 0),
+                new Pixel(0, 1),
+                new Pixel(1, 1),
+                new Pixel(2, 1),
+                new Pixel(1, 2)
+        ), color);
+        // when:
+        Collection<Color> colors = block.getRotations().stream()
+                .map(Block::getColor)
+                .collect(Collectors.toList());
+        // then:
+        assertThat(colors).containsOnly(color);
+    }
+
+    @Test
+    public void splitBlocksHaveSameColorAsOriginal() {
+        // given:
+        Color color = Color.PINK;
+        Block block = new Block(Stream.of(
+                new Pixel(0, 0),
+                new Pixel(0, 1),
+                new Pixel(1, 1),
+                new Pixel(2, 1),
+                new Pixel(1, 2)
+        ), color);
+        // when:
+        Collection<Color> colors = IntStream
+                .rangeClosed(0, block.getPossibleCuts().size())
+                .mapToObj(block::getCutBlocks)
+                .filter(Objects::nonNull)
+                .flatMap(Collection::stream)
+                .flatMap(Collection::stream)
+                .map(Block::getColor)
+                .collect(Collectors.toList());
+        // then:
+        assertThat(colors).containsOnly(color);
+    }
+
+    @Test
+    public void settingBlockColorShouldApplyColorsAlsoToItsSplitBlocks() {
+        // given:
+        Color color = Color.PINK;
+        Block block = new Block(Stream.of(
+                new Pixel(0, 0),
+                new Pixel(0, 1),
+                new Pixel(1, 1),
+                new Pixel(2, 1),
+                new Pixel(1, 2)
+        ), Color.GREEN);
+        Collection<Block> splitBlocks = IntStream
+                .rangeClosed(0, block.getPossibleCuts().size())
+                .mapToObj(block::getCutBlocks)
+                .filter(Objects::nonNull)
+                .flatMap(Collection::stream)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+        // when:
+        block.setColor(color);
+        Collection<Color> colors = splitBlocks.stream()
+                .map(Block::getColor)
+                .collect(Collectors.toList());
+        // then:
+        assertThat(colors).containsOnly(color);
+    }
+
+    @Test
+    public void settingBlockColorShouldApplyColorsAlsoToItsRotations() {
+        // given:
+        Color color = Color.PINK;
+        Block block = new Block(Stream.of(
+                new Pixel(0, 0),
+                new Pixel(0, 1),
+                new Pixel(1, 1),
+                new Pixel(2, 1),
+                new Pixel(1, 2)
+        ), Color.GREEN);
+        Collection<Block> rotations = block.getRotations();
+        // when:
+        block.setColor(color);
+        Collection<Color> colors = rotations.stream()
+                .map(Block::getColor)
+                .collect(Collectors.toList());
+        // then:
+        assertThat(colors).containsOnly(color);
     }
 
 }

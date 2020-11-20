@@ -70,9 +70,6 @@ public class Pixel implements Comparable<Pixel>, Cloneable {
 
     @Override
     public String toString() {
-        return "Pixel{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
+        return String.format("(%d, %d)", x, y);
     }
 }

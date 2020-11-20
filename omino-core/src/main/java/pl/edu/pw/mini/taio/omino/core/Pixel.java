@@ -21,9 +21,8 @@ public class Pixel implements Comparable<Pixel>, Cloneable {
         return x;
     }
 
-    void normalize(int x, int y) {
-        this.x = this.x - x;
-        this.y = this.y - y;
+    public Pixel normalized(int x, int y) {
+        return new Pixel(this.x - x, this.y - y);
     }
 
     public boolean isNeighbor(Pixel other)

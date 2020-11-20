@@ -62,9 +62,9 @@ class PixelTest {
         // given:
         Pixel pixel = new Pixel(2, 3);
         // when:
-        pixel.normalize(1, 2);
+        Pixel normalized = pixel.normalized(1, 2);
         // then:
-        assertThat(pixel).isEqualTo(new Pixel(1, 1));
+        assertThat(normalized).isEqualTo(new Pixel(1, 1));
     }
 
     @Test

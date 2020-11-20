@@ -32,21 +32,17 @@ public class Block implements Comparable<Block> {
     }
 
     public Block(Stream<Pixel> pixels, Color color) {
+        Collection<Pixel> temp = pixels.collect(Collectors.toList());
+        int minX = temp.stream().mapToInt(Pixel::getX).min().orElse(0);
+        int minY = temp.stream().mapToInt(Pixel::getY).min().orElse(0);
         this.pixels = Collections.unmodifiableSortedSet(
-                pixels
-                .map(Pixel::new)
+                temp.stream()
+                .map(pixel -> pixel.normalized(minX, minY))
                 .collect(Collectors.toCollection(TreeSet::new)));
         this.color = color;
         this.size = this.pixels.size();
-        normalize();
         this.width = this.pixels.stream().mapToInt(Pixel::getX).max().orElse(-1) + 1;
         this.height = this.pixels.stream().mapToInt(Pixel::getY).max().orElse(-1) + 1;
-    }
-
-    public void normalize() {
-        int minX = pixels.stream().mapToInt(Pixel::getX).min().orElse(0);
-        int minY = pixels.stream().mapToInt(Pixel::getY).min().orElse(0);
-        pixels.forEach(pixel -> pixel.normalize(minX, minY));
     }
 
     public SortedSet<Pixel> getPixels() {

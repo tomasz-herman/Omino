@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class BlockTest {
 
@@ -360,6 +361,23 @@ class BlockTest {
                 .collect(Collectors.toList());
         // then:
         assertThat(colors).containsOnly(color);
+    }
+
+    @Test
+    public void modifyingPixelsCollectionShouldThrowException() {
+        // given:
+        Block block = new Block(Stream.of(
+                new Pixel(0, 0),
+                new Pixel(0, 1),
+                new Pixel(1, 1),
+                new Pixel(2, 1),
+                new Pixel(1, 2)
+        ), Color.GREEN);
+        // when:
+        // then:
+        assertThatThrownBy(() -> block.getPixels().add(new Pixel(0, 0))).isInstanceOf(UnsupportedOperationException.class);
+        assertThatThrownBy(() -> block.getPixels().remove(new Pixel(0, 0))).isInstanceOf(UnsupportedOperationException.class);
+        assertThatThrownBy(() -> block.getPixels().clear()).isInstanceOf(UnsupportedOperationException.class);
     }
 
 }

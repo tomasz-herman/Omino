@@ -12,6 +12,13 @@ public interface BlockGenerator {
     Block any();
 
     /**
+     * Generates i-th block from the generator. I-th block is guaranteed to be the same every time.
+     * @param i-th block to be taken from the generator
+     * @return specific block
+     */
+    Block get(int i);
+
+    /**
      * Generates infinite stream of random blocks.
      * @return stream of random blocks
      */

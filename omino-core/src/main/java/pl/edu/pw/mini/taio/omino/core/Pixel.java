@@ -1,7 +1,7 @@
 package pl.edu.pw.mini.taio.omino.core;
 
 public class Pixel implements Comparable<Pixel>, Cloneable {
-    private int x, y;
+    private final int x, y;
 
     public Pixel(Pixel pixel) {
         this.x = pixel.x;
@@ -31,6 +31,7 @@ public class Pixel implements Comparable<Pixel>, Cloneable {
         return y == other.y && Math.abs(x - other.x) == 1;
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public Pixel rotated90() {
         return new Pixel(y, -x);
     }
@@ -39,6 +40,7 @@ public class Pixel implements Comparable<Pixel>, Cloneable {
         return new Pixel(-x, -y);
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public Pixel rotated270() {
         return new Pixel(-y, x);
     }

@@ -11,21 +11,20 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class IncrementalBlockGeneratorTest {
-
+class RandomBlockGeneratorTest {
     @Test
     public void throwsExceptionWhenBlockSizeIsNegative() {
         // given:
         // when:
         // then:
-        assertThatThrownBy(() -> new IncrementalBlockGenerator(-1, 0))
+        assertThatThrownBy(() -> new RandomBlockGenerator(-1, 0))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     public void shouldBeOneBlockWithSizeZero() {
         // given:
-        BlockGenerator generator = new IncrementalBlockGenerator(0, 0);
+        BlockGenerator generator = new RandomBlockGenerator(0, 0);
         // when:
         Collection<Block> blocks = generator.all().collect(Collectors.toList());
         // then:
@@ -35,7 +34,7 @@ class IncrementalBlockGeneratorTest {
     @Test
     public void shouldBeOneBlockWithSizeOne() {
         // given:
-        BlockGenerator generator = new IncrementalBlockGenerator(1, 0);
+        BlockGenerator generator = new RandomBlockGenerator(1, 0);
         // when:
         Collection<Block> blocks = generator.all().collect(Collectors.toList());
         // then:
@@ -45,7 +44,7 @@ class IncrementalBlockGeneratorTest {
     @Test
     public void shouldBeOneBlockWithSizeTwo() {
         // given:
-        BlockGenerator generator = new IncrementalBlockGenerator(2, 0);
+        BlockGenerator generator = new RandomBlockGenerator(2, 0);
         // when:
         Collection<Block> blocks = generator.all().collect(Collectors.toList());
         // then:
@@ -55,7 +54,7 @@ class IncrementalBlockGeneratorTest {
     @Test
     public void shouldBeTwoBlocksWithSizeThree() {
         // given:
-        BlockGenerator generator = new IncrementalBlockGenerator(3, 0);
+        BlockGenerator generator = new RandomBlockGenerator(3, 0);
         // when:
         Collection<Block> blocks = generator.all().collect(Collectors.toList());
         // then:
@@ -65,7 +64,7 @@ class IncrementalBlockGeneratorTest {
     @Test
     public void shouldBeSevenBlocksWithSizeFour() {
         // given:
-        BlockGenerator generator = new IncrementalBlockGenerator(4, 0);
+        BlockGenerator generator = new RandomBlockGenerator(4, 0);
         // when:
         Collection<Block> blocks = generator.all().collect(Collectors.toList());
         // then:
@@ -75,7 +74,7 @@ class IncrementalBlockGeneratorTest {
     @Test
     public void shouldBeEighteenBlocksWithSizeFive() {
         // given:
-        BlockGenerator generator = new IncrementalBlockGenerator(5, 0);
+        BlockGenerator generator = new RandomBlockGenerator(5, 0);
         // when:
         Collection<Block> blocks = generator.all().collect(Collectors.toList());
         // then:
@@ -85,7 +84,7 @@ class IncrementalBlockGeneratorTest {
     @Test
     public void shouldBeSixtyBlocksWithSizeSix() {
         // given:
-        BlockGenerator generator = new IncrementalBlockGenerator(6, 0);
+        BlockGenerator generator = new RandomBlockGenerator(6, 0);
         // when:
         Collection<Block> blocks = generator.all().collect(Collectors.toList());
         // then:
@@ -95,7 +94,7 @@ class IncrementalBlockGeneratorTest {
     @Test
     public void allBlocksShouldBeUnique() {
         // given:
-        BlockGenerator generator = new IncrementalBlockGenerator(6, 0);
+        BlockGenerator generator = new RandomBlockGenerator(6, 0);
         // when:
         Collection<Block> blocks = generator.all().collect(Collectors.toList());
         // then:
@@ -105,7 +104,7 @@ class IncrementalBlockGeneratorTest {
     @Test
     public void allStreamCountShouldBeSameAsGeneratorCount() {
         // given:
-        BlockGenerator generator = new IncrementalBlockGenerator(6, 0);
+        BlockGenerator generator = new RandomBlockGenerator(6, 0);
         // when:
         Stream<Block> all = generator.all();
         // then:
@@ -116,7 +115,7 @@ class IncrementalBlockGeneratorTest {
     public void allBlocksFromGeneratorShouldHaveDesiredSize() {
         // given:
         int size = 6;
-        BlockGenerator generator = new IncrementalBlockGenerator(size, 0);
+        BlockGenerator generator = new RandomBlockGenerator(size, 0);
         // when:
         Collection<Integer> sizes = generator.all()
                 .mapToInt(Block::getSize)

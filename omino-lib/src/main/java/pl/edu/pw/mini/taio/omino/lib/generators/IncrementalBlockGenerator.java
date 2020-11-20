@@ -10,15 +10,13 @@ import java.util.stream.Stream;
 /**
  * Generator designed to pre-generate all distinct existing blocks of given size.
  */
-public class IncrementalBlockGenerator implements BlockGenerator {
+public class IncrementalBlockGenerator extends FixedSizedBlockGenerator {
 
     private static final Set<Block> INITIAL =
             Set.of(new Block(Stream.of(new Pixel(0, 0))));
     private static final List<List<Integer>> MOVES =
             List.of(List.of(1, 0), List.of(-1, 0), List.of(0, 1), List.of(0, -1));
 
-
-    private final Random random;
     private final List<Block> all;
 
     /**
@@ -43,8 +41,7 @@ public class IncrementalBlockGenerator implements BlockGenerator {
      * @param seed for random number generation
      */
     public IncrementalBlockGenerator(int size, long seed) {
-        if(size < 0) throw new IllegalArgumentException("Block size must be a positive integer!");
-        this.random = new Random(seed);
+        super(size, seed);
         if(size == 0) {
             all = List.of(new Block(Stream.of()));
             return;
@@ -69,6 +66,11 @@ public class IncrementalBlockGenerator implements BlockGenerator {
     @Override
     public Block any() {
         return new Block(all.get(random.nextInt(all.size())));
+    }
+
+    @Override
+    public Block get(int i) {
+        return new Block(all.get(Integer.remainderUnsigned(i, count())));
     }
 
     @Override

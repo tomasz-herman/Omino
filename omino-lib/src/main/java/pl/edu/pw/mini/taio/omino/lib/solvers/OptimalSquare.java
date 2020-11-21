@@ -12,11 +12,10 @@ public class OptimalSquare extends Solver {
 
     @Override
     public Block[][] solve() {
-        if (blocks == null || blocks.length == 0)
-            return new Block[0][];
+        if (blocks == null || blocks.length == 0) return new Block[0][0];
         int pixels = Arrays.stream(blocks).mapToInt(Block::getSize).sum();
         int min = (int) Math.ceil(Math.sqrt(pixels));
-        for (int i = min; i < pixels; i++) {
+        for (int i = min; i <= pixels; i++) {
             Block[][] solution = new Block[i][i];
             if(recursion(solution, 0)) return solution;
             if(Thread.interrupted()) return null;

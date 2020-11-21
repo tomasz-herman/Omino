@@ -16,6 +16,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class BlockTest {
 
     @Test
+    public void blockWithNoPixelsHasZeroSize() {
+        // given:
+        Block block;
+        // when:
+        block = new Block(Stream.of());
+        // then:
+        assertThat(block.getSize()).isEqualTo(0);
+        assertThat(block.getHeight()).isEqualTo(0);
+        assertThat(block.getWidth()).isEqualTo(0);
+    }
+
+    @Test
     public void newBlockShouldBeNormalized() {
         // given:
         Block block;

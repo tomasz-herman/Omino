@@ -12,12 +12,11 @@ public class FastSquare extends Solver {
 
     @Override
     public Block[][] solve() {
-        if (blocks == null || blocks.length == 0)
-            return new Block[0][0];
+        if (blocks == null || blocks.length == 0) return new Block[0][0];
         int pixels = Arrays.stream(blocks).mapToInt(Block::getSize).sum();
         int min = (int) Math.ceil(Math.sqrt(pixels));
         next_board:
-        for (int size = min; size < pixels; size++) {
+        for (int size = min; size <= pixels; size++) {
             Block[][] solution = new Block[size][size];
             next_block:
             for (Block block : blocks) {

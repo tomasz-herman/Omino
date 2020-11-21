@@ -3,6 +3,7 @@ package pl.edu.pw.mini.taio.omino.lib.solvers;
 import pl.edu.pw.mini.taio.omino.core.Block;
 
 import java.awt.Dimension;
+import java.util.Arrays;
 
 public abstract class RectangleSolver extends Solver {
 
@@ -14,6 +15,15 @@ public abstract class RectangleSolver extends Solver {
 
     public int getCuts() {
         return cuts;
+    }
+
+    protected Block[][] prepareBoard() {
+        if (blocks == null || blocks.length == 0) return new Block[0][0];
+        int area = Arrays.stream(blocks).mapToInt(Block::getSize).sum();
+        if(area == 0) return new Block[0][0];
+        Dimension dimension = getDimensions(area);
+        if(dimension == null) return null;
+        return new Block[dimension.height][dimension.width];
     }
 
     protected static Dimension getDimensions(int area) {

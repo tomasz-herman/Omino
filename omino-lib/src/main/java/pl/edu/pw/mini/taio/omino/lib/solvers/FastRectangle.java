@@ -14,12 +14,10 @@ public class FastRectangle extends RectangleSolver {
 
     @Override
     public Block[][] solve() {
-        int area = Arrays.stream(blocks).mapToInt(Block::getSize).sum();
-        Dimension dimension = getDimensions(area);
-        if(dimension == null) return null;
-        Block[][] solution = new Block[dimension.height][dimension.width];
-        Deque<Block> queue = Arrays.stream(blocks).collect(Collectors.toCollection(LinkedList::new));
         cuts = 0;
+        Block[][] solution = prepareBoard();
+        if(solution == null || solution.length == 0) return solution;
+        Deque<Block> queue = Arrays.stream(blocks).collect(Collectors.toCollection(LinkedList::new));
         next_block:
         while(!queue.isEmpty()) {
             Block block = queue.pollFirst();

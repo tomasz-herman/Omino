@@ -16,11 +16,9 @@ public class OptimalRectangle extends RectangleSolver {
 
     @Override
     public Block[][] solve() {
-        int area = Arrays.stream(blocks).mapToInt(Block::getSize).sum();
-        Dimension dimension = getDimensions(area);
-        if(dimension == null) return null;
-        Block[][] solution = new Block[dimension.height][dimension.width];
         cuts = 0;
+        Block[][] solution = prepareBoard();
+        if(solution == null || solution.length == 0) return solution;
         while (true) {
             int[] cutsDistribution = new int[blocks.length];
             if (solveRec(cutsDistribution, 0, cuts, solution)) return solution;

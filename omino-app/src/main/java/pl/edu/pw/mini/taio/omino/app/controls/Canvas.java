@@ -53,40 +53,37 @@ public class Canvas {
                         MARGIN + (i + 1) * (BLOCK_SIZE + SPACING) - 0.5 * SPACING,
                         MARGIN + (j + 1) * (BLOCK_SIZE + SPACING) - 1.5 * SPACING,
                         MARGIN + (i + 1) * (BLOCK_SIZE + SPACING) - 0.5 * SPACING);
-                horizontal.setStrokeWidth(SPACING);
-                if(block == lower) {
-                    Color color = awtToFx(block.getColor());
-                    if(color.getBrightness() > 0.5) {
-                        color = color.darker().saturate();
-                    } else {
-                        color = color.brighter().desaturate();
-                    }
-                    horizontal.setStroke(color);
-                } else {
-                    horizontal.setStroke(Color.BLACK);
-                }
-                pane.getChildren().add(horizontal);
+                drawLine(block, lower, horizontal);
 
                 Line vertical = new Line(
                         MARGIN + (j + 1) * (BLOCK_SIZE + SPACING) - 0.5 * SPACING,
                         MARGIN + i * (BLOCK_SIZE + SPACING),
                         MARGIN + (j + 1) * (BLOCK_SIZE + SPACING) - 0.5 * SPACING,
                         MARGIN + (i + 1) * (BLOCK_SIZE + SPACING) - SPACING);
-                vertical.setStrokeWidth(SPACING);
-                if(block == right) {
-                    Color color = awtToFx(block.getColor());
-                    if(color.getBrightness() > 0.5) {
-                        color = color.darker().saturate();
-                    } else {
-                        color = color.brighter().desaturate();
-                    }
-                    vertical.setStroke(color);
-                } else {
-                    vertical.setStroke(Color.BLACK);
-                }
-                pane.getChildren().add(vertical);
+                drawLine(block, right, vertical);
             }
         }
+    }
+
+    private void drawLine(Block block, Block neighbour, Line line) {
+        line.setStrokeWidth(SPACING);
+        if(block == neighbour) {
+            Color color = awtToFx(block.getColor());
+            if(color.getBrightness() > 0.5) {
+                color = color.darker();
+            } else {
+                color = color.brighter();
+            }
+            if(color.getSaturation() > 0.5) {
+                color = color.desaturate();
+            } else {
+                color = color.saturate();
+            }
+            line.setStroke(color);
+        } else {
+            line.setStroke(Color.BLACK);
+        }
+        pane.getChildren().add(line);
     }
 
     public void draw(Block[] list) {

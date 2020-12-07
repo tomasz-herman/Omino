@@ -2,8 +2,10 @@ package pl.edu.pw.mini.taio.omino.lib.solvers;
 
 import pl.edu.pw.mini.taio.omino.core.Block;
 
-import java.awt.Dimension;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class FastRectangle extends RectangleSolver {

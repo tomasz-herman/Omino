@@ -3,7 +3,9 @@ package pl.edu.pw.mini.taio.omino.lib.generators;
 import pl.edu.pw.mini.taio.omino.core.Block;
 import pl.edu.pw.mini.taio.omino.core.Pixel;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

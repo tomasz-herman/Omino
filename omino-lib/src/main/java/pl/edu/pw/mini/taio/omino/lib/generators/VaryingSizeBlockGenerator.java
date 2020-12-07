@@ -2,7 +2,9 @@ package pl.edu.pw.mini.taio.omino.lib.generators;
 
 import pl.edu.pw.mini.taio.omino.core.Block;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Stream;
 
 public class VaryingSizeBlockGenerator implements BlockGenerator {

@@ -2,7 +2,7 @@ package pl.edu.pw.mini.taio.omino.core;
 
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;

@@ -1,8 +1,18 @@
 package pl.edu.pw.mini.taio.omino.core;
 
+import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static org.assertj.core.api.Assertions.*;
 
 class PixelTest {
 
@@ -120,5 +130,24 @@ class PixelTest {
         boolean neighbours = A.isNeighbor(B);
         // then:
         assertThat(neighbours).isEqualTo(false);
+    }
+
+    @Test
+    public void hashCodeShouldGiveNoMoreThanOnePerMillionConflicts() {
+        // given:
+        List<Pixel> pixels = new LinkedList<>();
+        for (int i = 0; i < 1000; i++) {
+            for (int j = 0; j < 1000; j++) {
+                pixels.add(new Pixel(i, j));
+            }
+        }
+        // when:
+        Set<Integer> hashes = pixels.stream()
+                .mapToInt(Pixel::hashCode)
+                .boxed()
+                .collect(Collectors.toSet());
+        // then:
+        assertThat(hashes).size()
+                .isCloseTo(pixels.size(), within(1));
     }
 }

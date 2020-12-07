@@ -2,9 +2,7 @@ package pl.edu.pw.mini.taio.omino.lib.solvers;
 
 import pl.edu.pw.mini.taio.omino.core.Block;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 

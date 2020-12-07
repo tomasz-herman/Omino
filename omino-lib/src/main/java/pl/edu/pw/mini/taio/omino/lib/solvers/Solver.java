@@ -6,7 +6,7 @@ import pl.edu.pw.mini.taio.omino.core.Pixel;
 public abstract class Solver {
     private static final int NANO = 1_000_000_000;
 
-    protected Block[] blocks;
+    protected final Block[] blocks;
     private double time;
 
     public Solver(Block[] blocks) {

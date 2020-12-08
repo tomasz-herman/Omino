@@ -8,8 +8,6 @@ import pl.edu.pw.mini.taio.omino.core.Block;
 import pl.edu.pw.mini.taio.omino.lib.solvers.FastSquare;
 import pl.edu.pw.mini.taio.omino.lib.solvers.Solver;
 
-import java.util.Arrays;
-
 import static pl.edu.pw.mini.taio.omino.app.utils.ColorConverter.awtToFx;
 
 public class Canvas {
@@ -29,6 +27,7 @@ public class Canvas {
         int width = w * (BLOCK_SIZE + SPACING) + 2 * MARGIN;
         int height = h * (BLOCK_SIZE + SPACING) + 2 * MARGIN;
         pane.setPrefSize(width, height);
+        if(h == 0) return;
 
         Rectangle border = new Rectangle(
                 MARGIN - SPACING * 0.5,

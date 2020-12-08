@@ -75,7 +75,7 @@ public class MainController {
     }
 
     @FXML private void onClear(ActionEvent event) {
-
+        setGeneratedBlocks();
     }
 
     @FXML private void onAbout(ActionEvent event) {
@@ -94,17 +94,21 @@ public class MainController {
         });
     }
 
-    private void displaySolution(Block[][] board, double time) {
+    private void displaySolution(Block[][] board, String method, double time, Integer cuts) {
         Platform.runLater(() -> {
             canvas.clear();
             canvas.draw(board);
-            infoLabel.setText(String.format("%.3f s", time));
+            infoLabel.setText(String.format("%s: %.3fs%s", method, time, cuts == null ? "" : String.format(", %d cuts", cuts)));
             progressIndicator.setVisible(false);
             statusLabel.setText("Idle");
         });
     }
 
-    private void setGeneratedBlocks(Block[] blocks) {
+    private void setGeneratedBlocks(Block... blocks) {
+        executor.finishLastTask();
+        progressIndicator.setVisible(false);
+        statusLabel.setText("Idle");
+        infoLabel.setText("");
         board.clear();
         canvas.clear();
         board.add(blocks);

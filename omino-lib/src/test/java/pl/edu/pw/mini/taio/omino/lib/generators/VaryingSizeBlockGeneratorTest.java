@@ -9,8 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 class VaryingSizeBlockGeneratorTest {
     @Test
@@ -32,12 +31,12 @@ class VaryingSizeBlockGeneratorTest {
     }
 
     @Test
-    public void throwsExceptionWhenFromParameterIsEqualToToParameter() {
+    public void noThrowingExceptionWhenFromParameterIsEqualToToParameter() {
         // given:
         // when:
         // then:
-        assertThatThrownBy(() -> new VaryingSizeBlockGenerator(0, 0, getBlockGeneratorFactoryMock()))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatCode(() -> new VaryingSizeBlockGenerator(0, 0, getBlockGeneratorFactoryMock()))
+                .doesNotThrowAnyException();
     }
 
     @Test
@@ -61,7 +60,7 @@ class VaryingSizeBlockGeneratorTest {
     @Test
     public void shouldBeNinetyBlocksWithSizeFromZeroToSix() {
         // given:
-        VaryingSizeBlockGenerator generator = new VaryingSizeBlockGenerator(0, 7, getBlockGeneratorFactoryMock());
+        VaryingSizeBlockGenerator generator = new VaryingSizeBlockGenerator(0, 6, getBlockGeneratorFactoryMock());
         // when:
         int count = generator.count();
         // then:
@@ -71,7 +70,7 @@ class VaryingSizeBlockGeneratorTest {
     @Test
     public void generatedBlocksByManyHaveVaryingSizes() {
         // given:
-        VaryingSizeBlockGenerator generator = new VaryingSizeBlockGenerator(0, 7, getBlockGeneratorFactoryMock());
+        VaryingSizeBlockGenerator generator = new VaryingSizeBlockGenerator(0, 6, getBlockGeneratorFactoryMock());
         // when:
         Set<Integer> sizes = generator.many()
                 .mapToInt(Block::getSize)
@@ -81,13 +80,13 @@ class VaryingSizeBlockGeneratorTest {
                 .boxed()
                 .collect(Collectors.toSet());
         // then:
-        assertThat(sizes).containsExactlyInAnyOrderElementsOf(IntStream.range(0, 7).boxed().collect(Collectors.toList()));
+        assertThat(sizes).containsExactlyInAnyOrderElementsOf(IntStream.rangeClosed(0, 6).boxed().collect(Collectors.toList()));
     }
 
     @Test
     public void generatedBlocksByAllHaveVaryingSizes() {
         // given:
-        VaryingSizeBlockGenerator generator = new VaryingSizeBlockGenerator(0, 7, getBlockGeneratorFactoryMock());
+        VaryingSizeBlockGenerator generator = new VaryingSizeBlockGenerator(0, 6, getBlockGeneratorFactoryMock());
         // when:
         Set<Integer> sizes = generator.all()
                 .mapToInt(Block::getSize)
@@ -96,7 +95,7 @@ class VaryingSizeBlockGeneratorTest {
                 .boxed()
                 .collect(Collectors.toSet());
         // then:
-        assertThat(sizes).containsExactlyInAnyOrderElementsOf(IntStream.range(0, 7).boxed().collect(Collectors.toList()));
+        assertThat(sizes).containsExactlyInAnyOrderElementsOf(IntStream.rangeClosed(0, 6).boxed().collect(Collectors.toList()));
     }
 
     private BlockGeneratorFactory getNullProducingBlockGeneratorFactoryMock() {

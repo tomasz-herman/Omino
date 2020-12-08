@@ -3,16 +3,21 @@ package pl.edu.pw.mini.taio.omino.app.controllers;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import pl.edu.pw.mini.taio.omino.app.controls.Canvas;
 import pl.edu.pw.mini.taio.omino.app.utils.OminoBoard;
-import pl.edu.pw.mini.taio.omino.app.utils.RandomColor;
 import pl.edu.pw.mini.taio.omino.app.utils.SolverExecutor;
 import pl.edu.pw.mini.taio.omino.core.Block;
-import pl.edu.pw.mini.taio.omino.lib.generators.IncrementalBlockGenerator;
 import pl.edu.pw.mini.taio.omino.lib.solvers.*;
+
+import java.io.IOException;
 
 public class MainController {
 
@@ -24,14 +29,11 @@ public class MainController {
     private Canvas canvas;
     private OminoBoard board;
     private SolverExecutor executor;
-    private RandomColor random;
-
 
     @FXML private void initialize() {
         canvas = new Canvas(pane);
         board = new OminoBoard(canvas);
         executor = new SolverExecutor(this::prepare);
-        random = new RandomColor();
         progressIndicator.setVisible(false);
     }
 
@@ -52,9 +54,20 @@ public class MainController {
     }
 
     @FXML private void onGenerate(ActionEvent event) {
-        IncrementalBlockGenerator ibg = new IncrementalBlockGenerator(5);
-        Block[] problem = ibg.many().limit(15).peek(block -> block.setColor(random.nextAwt())).toArray(Block[]::new);
-        board.add(problem);
+        try {
+            Stage stage = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/generator.fxml"));
+            Parent root = loader.load();
+            GeneratorController controller = loader.getController();
+            controller.setupCallback(this::setGeneratedBlocks);
+            controller.setupStage(stage);
+            stage.setScene(new Scene(root));
+            stage.setTitle("Generate blocks");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML private void onAdd(ActionEvent event) {
@@ -89,5 +102,12 @@ public class MainController {
             progressIndicator.setVisible(false);
             statusLabel.setText("Idle");
         });
+    }
+
+    private void setGeneratedBlocks(Block[] blocks) {
+        board.clear();
+        canvas.clear();
+        board.add(blocks);
+        canvas.draw(blocks);
     }
 }

@@ -30,7 +30,7 @@ public abstract class RectangleSolver extends Solver {
         if(area <= 0) throw new IllegalArgumentException("Area must be a positive integer!");
         for (int i = (int) Math.sqrt(area); i > 0; i--) {
             if (area / i * i == area) {
-                return new Dimension(i, area / i);
+                return new Dimension(area / i, i);
             }
         }
         return null;

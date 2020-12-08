@@ -17,10 +17,10 @@ public class VaryingSizeBlockGenerator implements BlockGenerator {
     }
 
     public VaryingSizeBlockGenerator(int from, int to, BlockGeneratorFactory factory, long seed) {
-        if(from < 0 || to < 0 || to <= from) throw new IllegalArgumentException("Illegal values of from or to parameters");
-        generators = new ArrayList<>(to - from);
+        if(from < 0 || to < 0 || to < from) throw new IllegalArgumentException("Illegal values of from or to parameters");
+        generators = new ArrayList<>(to - from + 1);
         random = new Random(seed);
-        for (int i = from; i < to; i++) {
+        for (int i = from; i <= to; i++) {
             BlockGenerator generator = factory.newInstance(i, random.nextLong());
             if(generator == null) throw new IllegalArgumentException("Got null generator from factory!");
             generators.add(generator);

@@ -8,6 +8,8 @@ import pl.edu.pw.mini.taio.omino.core.Block;
 import pl.edu.pw.mini.taio.omino.lib.solvers.FastSquare;
 import pl.edu.pw.mini.taio.omino.lib.solvers.Solver;
 
+import java.util.Arrays;
+
 import static pl.edu.pw.mini.taio.omino.app.utils.ColorConverter.awtToFx;
 
 public class Canvas {
@@ -91,8 +93,8 @@ public class Canvas {
         pane.getChildren().add(line);
     }
 
-    public void draw(Block[] list) {
-        Solver solver = new FastSquare(list);
+    public void draw(Block... blocks) {
+        Solver solver = new FastSquare(blocks);
         Block[][] board = solver.solve();
         draw(board);
     }

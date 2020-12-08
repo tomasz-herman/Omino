@@ -5,6 +5,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import pl.edu.pw.mini.taio.omino.core.Block;
+import pl.edu.pw.mini.taio.omino.lib.solvers.FastSquare;
+import pl.edu.pw.mini.taio.omino.lib.solvers.Solver;
 
 import static pl.edu.pw.mini.taio.omino.app.utils.ColorConverter.awtToFx;
 
@@ -20,30 +22,33 @@ public class Canvas {
     }
 
     public void draw(Block[][] board) {
-        int width = board[0].length * (BLOCK_SIZE + SPACING) + 2 * MARGIN;
-        int height = board.length * (BLOCK_SIZE + SPACING) + 2 * MARGIN;
+        int h = board.length;
+        int w = h == 0 ? 0 : board[0].length;
+        int width = w * (BLOCK_SIZE + SPACING) + 2 * MARGIN;
+        int height = h * (BLOCK_SIZE + SPACING) + 2 * MARGIN;
         pane.setPrefSize(width, height);
 
         Rectangle border = new Rectangle(
                 MARGIN - SPACING * 0.5,
                 MARGIN - SPACING * 0.5,
-                board[0].length * (BLOCK_SIZE + SPACING),
-                board.length * (BLOCK_SIZE + SPACING));
+                w * (BLOCK_SIZE + SPACING),
+                h * (BLOCK_SIZE + SPACING));
         border.setFill(Color.TRANSPARENT);
         border.setStroke(Color.BLACK);
         border.setStrokeWidth(SPACING);
         pane.getChildren().add(border);
 
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
                 Block block = board[i][j];
+                if(block == null) continue;
                 Rectangle rectangle = new Rectangle(MARGIN + j * (BLOCK_SIZE + SPACING), MARGIN + i * (BLOCK_SIZE + SPACING), BLOCK_SIZE, BLOCK_SIZE);
                 rectangle.setFill(awtToFx(block.getColor()));
                 pane.getChildren().add(rectangle);
             }
         }
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
                 Block block = board[i][j];
                 Block lower = i + 1 < board.length ? board[i + 1][j] : null;
                 Block right = j + 1 < board[0].length ? board[i][j + 1] : null;
@@ -67,7 +72,7 @@ public class Canvas {
 
     private void drawLine(Block block, Block neighbour, Line line) {
         line.setStrokeWidth(SPACING);
-        if(block == neighbour) {
+        if(block != null && block == neighbour) {
             Color color = awtToFx(block.getColor());
             if(color.getBrightness() > 0.5) {
                 color = color.darker();
@@ -87,7 +92,9 @@ public class Canvas {
     }
 
     public void draw(Block[] list) {
-
+        Solver solver = new FastSquare(list);
+        Block[][] board = solver.solve();
+        draw(board);
     }
 
     public void clear() {

@@ -4,9 +4,14 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCharacterCombination;
 import javafx.stage.Stage;
 
 public class App extends Application {
+    private static final int WINDOW_WIDTH = 1280;
+    private static final int WINDOW_HEIGHT = 800;
+
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -16,6 +21,8 @@ public class App extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/main.fxml"));
         primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Omino");
+        primaryStage.setWidth(WINDOW_WIDTH);
+        primaryStage.setHeight(WINDOW_HEIGHT);
         primaryStage.show();
     }
 }

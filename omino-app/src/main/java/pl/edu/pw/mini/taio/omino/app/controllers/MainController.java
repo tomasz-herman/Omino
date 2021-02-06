@@ -11,6 +11,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.web.WebView;
 import pl.edu.pw.mini.taio.omino.app.controls.Canvas;
 import pl.edu.pw.mini.taio.omino.app.utils.OminoBoard;
 import pl.edu.pw.mini.taio.omino.app.utils.SolverExecutor;
@@ -95,7 +96,18 @@ public class MainController {
     }
 
     @FXML private void onAbout(ActionEvent event) {
-
+        WebView aboutWebView = new WebView();
+        aboutWebView.minWidth(1050);
+        aboutWebView.minHeight(1050);
+        aboutWebView.prefWidth(1950);
+        aboutWebView.prefHeight(1070);
+        aboutWebView.getEngine().load("https://github.com/tomasz-herman/Omino");
+        Scene myscene = new Scene(aboutWebView, 960, 600);
+        Stage stage = new Stage();
+        stage.setScene(myscene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("About");
+        stage.show();
     }
 
     @FXML private void onClose(ActionEvent event) {

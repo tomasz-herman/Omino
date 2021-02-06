@@ -79,6 +79,7 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/adder.fxml"));
             Parent root = loader.load();
             AdderController controller = loader.getController();
+            controller.setupCallback(this::addBlocks);
             controller.setupStage(stage);
             stage.setScene(new Scene(root));
             stage.setTitle("Add blocks");
@@ -128,5 +129,15 @@ public class MainController {
         canvas.clear();
         board.add(blocks);
         canvas.draw(blocks);
+    }
+
+    private void addBlocks(Block... blocks) {
+        executor.finishLastTask();
+        progressIndicator.setVisible(false);
+        statusLabel.setText("Idle");
+        infoLabel.setText("");
+        board.add(blocks);
+        canvas.clear();
+        canvas.draw(board.getList());
     }
 }

@@ -193,6 +193,10 @@ public class Block implements Comparable<Block> {
         return split;
     }
 
+    public List<Block> connected() {
+        return split(Collections.emptyList());
+    }
+
     public List<Cut> getPossibleCuts() {
         List<Cut> cuts = new ArrayList<>();
         for (Pixel x : pixels) {

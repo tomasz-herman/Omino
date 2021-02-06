@@ -5,6 +5,8 @@ There might be extra condition applied:
 - blocks might be only arranged on a square, minimal square size is desired.
 - blocks might be arranged on a minimal area rectangle, but cutting blocks is possible. Whole rectangle must be covered, minimal number of cuts is desired.
 
+![omino-app](https://raw.githubusercontent.com/tomasz-herman/Omino/master/omino-gallery/omino-app.png)
+
 There are several algorithms implemented that either optimize a desired problem or time.
 
 # Building

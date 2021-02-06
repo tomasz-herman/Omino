@@ -11,63 +11,49 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.pw.mini.taio.omino.app.controllers.MainController">
-   <children>
-      <MenuBar>
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#onClose" text="Close" />
-            </items>
-          </Menu>
-            <Menu mnemonicParsing="false" text="Solve">
-              <items>
-                <MenuItem mnemonicParsing="false" onAction="#onSolveOptimalSquare" text="Optimal Square" />
-                  <MenuItem mnemonicParsing="false" onAction="#onSolveFastSquare" text="Fast Square" />
-                  <MenuItem mnemonicParsing="false" onAction="#onSolveOptimalRectangle" text="Optimal Rectangle" />
-                  <MenuItem mnemonicParsing="false" onAction="#onSolveFastRectangle" text="Fast Rectangle" />
-              </items>
-            </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#onGenerate" text="Generate" />
-                  <MenuItem mnemonicParsing="false" onAction="#onAdd" text="Add" />
-                  <MenuItem mnemonicParsing="false" onAction="#onClear" text="Clear" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-         <content>
-            <Pane fx:id="pane" />
-         </content>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </ScrollPane>
-      <HBox alignment="CENTER_RIGHT">
-         <children>
-            <Label fx:id="infoLabel">
-               <HBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </HBox.margin>
-            </Label>
-            <ProgressIndicator fx:id="progressIndicator" prefHeight="20.0" prefWidth="20.0" HBox.hgrow="NEVER">
-               <HBox.margin>
-                  <Insets left="5.0" right="5.0" />
-               </HBox.margin>
-            </ProgressIndicator>
-            <Label fx:id="statusLabel" text="Idle">
-               <HBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </HBox.margin>
-            </Label>
-         </children>
-      </HBox>
-   </children>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+      prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="pl.edu.pw.mini.taio.omino.app.controllers.MainController">
+    <MenuBar>
+        <Menu mnemonicParsing="false" text="File">
+            <MenuItem mnemonicParsing="false" onAction="#onClose" text="Close"/>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Solve">
+            <MenuItem mnemonicParsing="false" onAction="#onSolveOptimalSquare" text="Optimal Square"/>
+            <MenuItem mnemonicParsing="false" onAction="#onSolveFastSquare" text="Fast Square"/>
+            <MenuItem mnemonicParsing="false" onAction="#onSolveOptimalRectangle" text="Optimal Rectangle"/>
+            <MenuItem mnemonicParsing="false" onAction="#onSolveFastRectangle" text="Fast Rectangle"/>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+            <MenuItem mnemonicParsing="false" onAction="#onGenerate" text="Generate"/>
+            <MenuItem mnemonicParsing="false" onAction="#onAdd" text="Add"/>
+            <MenuItem mnemonicParsing="false" onAction="#onClear" text="Clear"/>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+            <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About"/>
+        </Menu>
+    </MenuBar>
+    <ScrollPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+        <VBox.margin>
+            <Insets/>
+        </VBox.margin>
+        <Pane fx:id="pane"/>
+    </ScrollPane>
+    <HBox alignment="CENTER_RIGHT">
+        <Label fx:id="infoLabel">
+            <HBox.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </HBox.margin>
+        </Label>
+        <ProgressIndicator fx:id="progressIndicator" prefHeight="20.0" prefWidth="20.0" HBox.hgrow="NEVER">
+            <HBox.margin>
+                <Insets left="5.0" right="5.0"/>
+            </HBox.margin>
+        </ProgressIndicator>
+        <Label fx:id="statusLabel" text="Idle">
+            <HBox.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </HBox.margin>
+        </Label>
+    </HBox>
 </VBox>

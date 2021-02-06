@@ -15,7 +15,10 @@ import pl.edu.pw.mini.taio.omino.app.controls.Canvas;
 import pl.edu.pw.mini.taio.omino.app.utils.OminoBoard;
 import pl.edu.pw.mini.taio.omino.app.utils.SolverExecutor;
 import pl.edu.pw.mini.taio.omino.core.Block;
-import pl.edu.pw.mini.taio.omino.lib.solvers.*;
+import pl.edu.pw.mini.taio.omino.lib.solvers.FastRectangle;
+import pl.edu.pw.mini.taio.omino.lib.solvers.FastSquare;
+import pl.edu.pw.mini.taio.omino.lib.solvers.OptimalRectangle;
+import pl.edu.pw.mini.taio.omino.lib.solvers.OptimalSquare;
 
 import java.io.IOException;
 
@@ -71,7 +74,19 @@ public class MainController {
     }
 
     @FXML private void onAdd(ActionEvent event) {
-
+        try {
+            Stage stage = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/adder.fxml"));
+            Parent root = loader.load();
+            AdderController controller = loader.getController();
+            controller.setupStage(stage);
+            stage.setScene(new Scene(root));
+            stage.setTitle("Add blocks");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML private void onClear(ActionEvent event) {

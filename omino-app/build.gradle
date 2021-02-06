@@ -9,7 +9,7 @@ dependencies {
 }
 
 javafx {
-    version = '14'
+    version = '15.0.1'
     modules = [ 'javafx.base', 'javafx.graphics', 'javafx.controls', 'javafx.swing', 'javafx.fxml' ]
     mainClassName = 'pl.edu.pw.mini.taio.omino.app.Launcher'
 }

@@ -11,9 +11,9 @@ import pl.edu.pw.mini.taio.omino.lib.solvers.Solver;
 import static pl.edu.pw.mini.taio.omino.app.utils.ColorConverter.awtToFx;
 
 public class Canvas {
-    private final static int MARGIN = 25;
-    private final static int BLOCK_SIZE = 40;
-    private final static int SPACING = 2;
+    public final static int MARGIN = 25;
+    public final static int BLOCK_SIZE = 40;
+    public final static int SPACING = 2;
 
     private final Pane pane;
 
